@@ -7,103 +7,230 @@
   <groupId>org.example</groupId>
   <artifactId>TestAutomation</artifactId>
   <version>1.0-SNAPSHOT</version>
-
   <name>TestAutomation</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <app.device>${app.device}</app.device>
+    <app.version>${app.version}</app.version>
   </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>write-project-properties</goal>
+            </goals>
+            <configuration>
+              <outputFile>${project.build.testOutputDirectory}/my.properties</outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.3</version>
+        <executions>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <!-- Sets the path to the file which contains the execution data. -->
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-java</artifactId>
-      <version>6.10.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-core</artifactId>
-      <version>6.10.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-html -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-html</artifactId>
-      <version>0.2.7</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/cobertura/cobertura -->
-    <dependency>
-      <groupId>cobertura</groupId>
-      <artifactId>cobertura</artifactId>
-      <version>1.8</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-junit</artifactId>
-      <version>6.10.0</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-jvm-deps -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-jvm-deps</artifactId>
-      <version>1.0.6</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core -->
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <version>2.2</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.cucumber/gherkin -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>gherkin</artifactId>
-      <version>17.0.1</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <version>3.141.59</version>
-    </dependency>
+              <dataFile>target/jacoco.exec</dataFile>
+              <!-- Sets the output directory for the code coverage report. -->
+              <outputDirectory>target/my-reports</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <systemPropertyVariables>
+            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-    <!-- https://mvnrepository.com/artifact/net.sourceforge.cobertura/cobertura -->
-    <dependency>
-      <groupId>net.sourceforge.cobertura</groupId>
-      <artifactId>cobertura</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/junit/junit -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
-    <dependency>
-      <groupId>io.appium</groupId>
-      <artifactId>java-client</artifactId>
-      <version>7.4.1</version>
-    </dependency>
+<dependencies>
+  <dependency>
+    <groupId>com.iexceed</groupId>
+    <artifactId>appzillon-automation-framework</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <scope>system</scope>
+    <systemPath>/home/i-exceed.com/sriganesh.d/Documents/Retail_13/automation-platform/appzillon-automation-framework/target/AAF-jar-with-dependencies.jar</systemPath>
+  </dependency>
+
+  <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-java</artifactId>
+    <version>6.8.1</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-picocontainer -->
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-picocontainer</artifactId>
+    <version>6.8.1</version>
+    <scope>test</scope>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/io.cucumber/gherkin -->
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>gherkin</artifactId>
+    <version>15.0.2</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-jvm -->
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-jvm</artifactId>
+    <version>6.8.1</version>
+    <type>pom</type>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-testng -->
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-testng</artifactId>
+    <version>6.8.1</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-junit</artifactId>
+    <version>6.10.4</version>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>io.cucumber</groupId>
+    <artifactId>cucumber-junit</artifactId>
+    <version>6.10.4</version>
+    <scope>compile</scope>
+  </dependency>
+
+  <dependency>
+    <groupId>tech.grasshopper</groupId>
+    <artifactId>extentreports-cucumber6-adapter</artifactId>
+    <version>2.0.0</version>
+    <scope>test</scope>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+  <dependency>
+    <groupId>com.aventstack</groupId>
+    <artifactId>extentreports</artifactId>
+    <version>5.0.4</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+  <dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.10.0</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+  <dependency>
+    <groupId>org.seleniumhq.selenium</groupId>
+    <artifactId>selenium-java</artifactId>
+    <version>3.141.59</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+  <dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>5.0.0</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+  <dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.0.0</version>
+  </dependency>
+  <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+  <dependency>
+    <groupId>io.appium</groupId>
+    <artifactId>java-client</artifactId>
+    <version>7.5.1</version>
+  </dependency>
+  <dependency>
+    <groupId>com.j2html</groupId>
+    <artifactId>j2html</artifactId>
+    <version>1.4.0</version>
+  </dependency>
+<!--  <dependency>-->
+<!--    <groupId>com.googlecode.json-simple</groupId>-->
+<!--    <artifactId>json-simple</artifactId>-->
+<!--    <version>1.1</version>-->
+<!--  </dependency>-->
+  <!-- https://mvnrepository.com/artifact/org.json/json -->
+  <dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20210307</version>
+  </dependency>
+
+
+  <dependency>
+    <groupId>net.continuumsecurity</groupId>
+    <artifactId>zap-java-api</artifactId>
+    <version>2.4.2</version>
+    <scope>system</scope>
+    <systemPath>/libs/proxy-2.4.2-SNAPSHOT.jar</systemPath>
+  </dependency>
+  <dependency>
+    <groupId>org.owasp</groupId>
+    <artifactId>zaproxy-client-api</artifactId>
+    <version>2.4-6</version>
+    <scope>system</scope>
+    <systemPath>../../../IdeaProjects/ZAPTesting/libs/zap-api-2.4-v6.jar</systemPath>
+  </dependency>
+  <dependency>
+    <groupId>edu.umass.cs.benchlab</groupId>
+    <artifactId>harlib</artifactId>
+    <version>1.1.1</version>
+    <scope>system</scope>
+    <systemPath>../../../IdeaProjects/ZAPTesting/libs/harlib-1.1.1.jar</systemPath>
+  </dependency>
 
 
 
 
 
-
-  </dependencies>
+</dependencies>
 
 </project>
